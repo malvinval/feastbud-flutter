@@ -1,5 +1,6 @@
 import "package:fitness/models/category_model.dart";
 import "package:fitness/models/diet_model.dart";
+import "package:fitness/models/people_also_search_model.dart";
 import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
 
@@ -13,6 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
     List<CategoryModel> categories = [];
     List<DietModel> dietRecommendation = [];
+    List<PeopleAlsoSearch> peopleAlsoSearch = [];
 
     void _getCategories() {
         categories = CategoryModel.getCategories();
@@ -20,6 +22,10 @@ class _HomePageState extends State<HomePage> {
 
     void _getDietRecommendation() {
         dietRecommendation = DietModel.getDietRecommendation();
+    }
+
+    void _getPeopleAlsoSearch() {
+        peopleAlsoSearch = PeopleAlsoSearch.getPeopleAlsoSearch();
     }
 
     AppBar appBar() {
@@ -192,7 +198,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     Column dietRecommendationSection() {
-      return Column(
+        return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
                 const Padding(
@@ -281,10 +287,103 @@ class _HomePageState extends State<HomePage> {
         );
     }
 
+    Column peopleAlsoSearchSection() {
+        return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+                const Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text(
+                        "People also search",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600
+                        ),
+                    ),
+                ),
+
+                const SizedBox(
+                    height: 15,
+                ),
+                
+                ListView.separated(
+                    // mencegah ListView berukuran sama dengan parent sehingga menyebabkan error "was not laid out"
+                    shrinkWrap: true,
+
+                    padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20
+                    ),
+
+                    itemBuilder: (context, index) {
+                        return Container(
+                            padding: const EdgeInsets.only(left: 20),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                    BoxShadow(
+                                        color: const Color(0xff1D1617).withOpacity(0.07),
+                                        offset: const Offset(0, 10),
+                                        blurRadius: 40,
+                                        spreadRadius: 0
+                                    )
+                                ]
+                            ),
+                            height: 90,
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                    Container(
+                                        width: 50,
+                                        height: 50,
+                                        child: SvgPicture.asset(peopleAlsoSearch[index].icon),
+                                    ),
+
+                                    Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                            Text(
+                                                peopleAlsoSearch[index].name,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.black,
+                                                    fontSize: 16
+                                                ),
+                                            ),
+                                            Text(
+                                                peopleAlsoSearch[index].desc,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Color(0xff786F72),
+                                                    fontSize: 13
+                                                ),
+                                            )
+                                        ],
+                                    ),
+
+                                    SvgPicture.asset("assets/icons/go.svg")
+                                ],
+                            ),
+                        );
+                    },
+                    separatorBuilder: (context, index) {
+                        return const SizedBox(
+                            height: 25,
+                        );
+                    },
+                    itemCount: peopleAlsoSearch.length
+                )
+            ]
+        );
+    }
+
     @override
     Widget build(BuildContext context) {
         _getCategories();
         _getDietRecommendation();
+        _getPeopleAlsoSearch();
 
         return Scaffold(
             backgroundColor: Colors.white,
@@ -306,7 +405,17 @@ class _HomePageState extends State<HomePage> {
                                 height: 40,
                             ),
 
-                            dietRecommendationSection()
+                            dietRecommendationSection(),
+
+                            const SizedBox(
+                                height: 40,
+                            ),
+
+                            peopleAlsoSearchSection(),
+
+                            const SizedBox(
+                                height: 40,
+                            )
                         ],
                     )
                 ],
