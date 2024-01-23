@@ -289,26 +289,28 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
             backgroundColor: Colors.white,
             appBar: appBar(),
-            body: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            body: ListView(
                 children: [
-                    textField(),
-                    
-                    const SizedBox(
-                        height: 40,
-                    ),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                            textField(),
+                            
+                            const SizedBox(
+                                height: 40,
+                            ),
 
-                    categoriesSection(),
+                            categoriesSection(),
 
-                    const SizedBox(
-                        height: 40,
-                    ),
+                            const SizedBox(
+                                height: 40,
+                            ),
 
-                    dietRecommendationSection(),
+                            dietRecommendationSection()
+                        ],
+                    )
                 ],
-            ),
+            )
         );
     }
-
-    
 }
